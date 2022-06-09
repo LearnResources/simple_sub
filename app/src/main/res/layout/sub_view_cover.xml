@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:showIn="@layout/fragment_sub_1">
+
+    <VideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_sub_cover"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:visibility="gone"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="#ccc" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vp_cover"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <me.relex.circleindicator.CircleIndicator
+        android:id="@+id/sub_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/ds12"
+        android:layout_marginTop="@dimen/ds14"
+        android:visibility="gone"
+        app:ci_drawable="@drawable/sub_ic_indicator"
+        app:ci_drawable_unselected="@drawable/sub_ic_unselected"
+        app:layout_constraintTop_toBottomOf="@+id/vp_cover"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

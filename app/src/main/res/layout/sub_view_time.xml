@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="@dimen/ds20"
+    android:paddingTop="@dimen/ds16"
+    android:paddingRight="@dimen/ds14"
+    tools:showIn="@layout/fragment_sub_1">
+
+    <include layout="@layout/sub_view_close" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/bt_restore_purchase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:background="?selectableItemBackground"
+        android:padding="@dimen/ds6"
+        android:text="@string/restore"
+        android:textColor="@color/gray_6"
+        android:textSize="@dimen/ds_sp12"
+        app:layout_constraintRight_toRightOf="parent" />
+</FrameLayout>

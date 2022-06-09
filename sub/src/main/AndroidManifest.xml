@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.sub">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+    <application>
+        <activity
+            android:name=".SubActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="unspecified"
+            android:theme="@style/Sub.Theme.Transparent" />
+
+        <activity
+            android:name=".SubRewardActivity"
+            android:launchMode="singleTop"
+            android:noHistory="true"
+            android:screenOrientation="unspecified"
+            android:theme="@style/Sub.Theme.Transparent" />
+    </application>
+</manifest>

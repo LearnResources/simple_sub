@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sub_day_desc" translatable="false">then %s/week</string>
+    <string name="sub_year_desc" translatable="false">then %s/year</string>
+    <string name="sub_monthly_desc" translatable="false">then %s/month</string>
+    <string name="sub_feature_text_1" translatable="false">Feature 1</string>
+    <string name="sub_feature_text_2" translatable="false">Feature 2</string>
+    <string name="sub_feature_text_3" translatable="false">Feature 3</string>
+    <string name="sub_feature_text_4" translatable="false">Feature 4</string>
+
+    <string name="sub_continue_with_limited_version" translatable="false">&lt;u&gt;Continue with limited version&lt;/u&gt;</string>
+    <string name="sub_desc" translatable="false">Billing starts at the end of the 3-day free trial with %s/week or %s/month or %s/year. You can cancel at any time on Google Play. &lt;font color=#246FFF>Privacy Policy&lt;/font></string>
+    <string name="sub_desc_trial" translatable="false">Billing starts at the end of the 3-day free trial.&lt;br/&gt;You can cancel at any time on Google Play. &lt;font color=#246FFF>Privacy Policy&lt;/font></string>
+    <string name="sub_free_trial" translatable="false">Free trial</string>
+    <string name="subscribe" translatable="false">Continue</string>
+    <string name="restore" translatable="false">&lt;u&gt;Restore&lt;/u&gt;</string>
+    <string name="sub_not_vip" translatable="false">You are not VIP member</string>
+    <string name="sub_continue" translatable="false">Continue</string>
+    <string name="sub_try_3_days" translatable="false">Try it FREE for 3 days!</string>
+    <string name="sub_free_trial_3_days" translatable="false">3-Day free trial</string>
+</resources>

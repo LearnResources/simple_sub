@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/ds8">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/bt_action"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/ds42"
+        android:background="@drawable/sub_select_button_bg"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/ds80"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/ds_sp15"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Continue" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/bt_continue_limit_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/ds14"
+        android:background="?selectableItemBackground"
+        android:padding="@dimen/ds2"
+        android:text="@string/sub_continue_with_limited_version"
+        android:textColor="#99FFFFFF"
+        android:textSize="@dimen/ds_sp12"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bt_action" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
