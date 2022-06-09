@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.sub.SubScreenManager;
+import com.petprojects.sub.SubScreenManager;
 
 public class MainActivity extends AppCompatActivity {
 

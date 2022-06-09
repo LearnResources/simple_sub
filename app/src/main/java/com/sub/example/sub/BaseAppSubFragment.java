@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,11 +25,13 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.sub.PurchaseHelper;
-import com.sub.SubConfigPrefs;
-import com.sub.base.BaseSubFragment;
-import com.sub.util.SubLogUtils;
+import com.petprojects.sub.PurchaseHelper;
+import com.petprojects.sub.SubConfigPrefs;
+import com.petprojects.sub.base.BaseSubFragment;
+import com.petprojects.sub.util.SubLogUtils;
 import com.sub.example.R;
+import com.sub.example.sub.PurchasePack;
+import com.sub.example.sub.Sub;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,6 +41,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import me.relex.circleindicator.CircleIndicator;
+
 
 public abstract class BaseAppSubFragment extends BaseSubFragment {
 
@@ -171,8 +175,10 @@ public abstract class BaseAppSubFragment extends BaseSubFragment {
             btClose.setOnClickListener(view -> {
                 try {
                     if (!close()) {
+                        Log.i("superman", "initTimerAndCloseButton: close");
                         requireActivity().finish();
                     }
+                    Log.i("superman", "initTimerAndCloseButton: 1");
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
@@ -334,20 +340,16 @@ public abstract class BaseAppSubFragment extends BaseSubFragment {
                     if (viewTag != null) {
                         selectedPack = (String) viewTag;
                     }
-                    TextView btAction = rootView.findViewById(R.id.bt_action);
-                    String ctaText = textChangeOnPackUpdateMap.get(pack);
-                    if (!TextUtils.isEmpty(ctaText)) {
-                        btAction.setText(ctaText);
-                    } else {
-                        btAction.setText(getActionButtonText());
-                    }
+                    updateCtaText(rootView, pack);
+//                    FireBaseLogEvents.getInstance().log("SUB_SCR_CHANGE_PACK");
                     makePurchase();
                 });
 
                 String packDefault = Sub.getPackDefault();
                 if (packDefault.equalsIgnoreCase(pack)) {
                     layoutPack.setSelected(true);
-                    selectedPack = pack;
+                    selectedPack = packDefault;
+                    updateCtaText(rootView, selectedPack);
                 }
 
                 View viewBestOffer = findViewByName(rootView, String.format(Locale.US,
@@ -369,6 +371,16 @@ public abstract class BaseAppSubFragment extends BaseSubFragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void updateCtaText(View rootView, String pack) {
+        TextView btAction = rootView.findViewById(R.id.bt_action);
+        String ctaText = textChangeOnPackUpdateMap.get(pack);
+        if (!TextUtils.isEmpty(ctaText)) {
+            btAction.setText(ctaText);
+        } else {
+            btAction.setText(getActionButtonText());
         }
     }
 
@@ -408,15 +420,25 @@ public abstract class BaseAppSubFragment extends BaseSubFragment {
         if (btContinueLimitVersion == null) {
             return;
         }
+        if (hideContinuaLimitedButton()) {
+            btContinueLimitVersion.setVisibility(View.INVISIBLE);
+            return;
+        }
+        btContinueLimitVersion.setVisibility(View.VISIBLE);
         btContinueLimitVersion.setVisibility(isTrialFragment() ? View.GONE : View.VISIBLE);
         btContinueLimitVersion.setText(fromHtml(context, R.string.sub_continue_with_limited_version));
         btContinueLimitVersion.setOnClickListener(view -> {
             try {
+//                FireBaseLogEvents.getInstance().log("SUB_SCR_CONTINUE_LIMITED_VERSION");
                 requireActivity().finish();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
         });
+    }
+
+    private boolean hideContinuaLimitedButton() {
+        return true;
     }
 
     private Spanned fromHtml(Context context, @StringRes int stringResId) {
@@ -458,7 +480,10 @@ public abstract class BaseAppSubFragment extends BaseSubFragment {
     }
 
     private void initSubDescClickEvent(TextView tvSubDesc) {
-//        tvSubDesc.setOnClickListener(v -> AppUtil.openPolicy(tvSubDesc.getContext()));
+        tvSubDesc.setOnClickListener(v -> {
+//            FireBaseLogEvents.getInstance().log("SUB_SCR_OPEN_POLICY");
+//            AppUtil.openPolicy(tvSubDesc.getContext());
+        });
     }
 
     private void initActionButton(View rootView) {

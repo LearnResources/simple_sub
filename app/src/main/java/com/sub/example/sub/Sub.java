@@ -3,11 +3,11 @@ package com.sub.example.sub;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.sub.PurchaseConfig;
-import com.sub.PurchaseHelper;
-import com.sub.SubScreen;
-import com.sub.SubScreenConfig;
-import com.sub.SubScreenManager;
+import com.petprojects.sub.PurchaseConfig;
+import com.petprojects.sub.PurchaseHelper;
+import com.petprojects.sub.SubScreen;
+import com.petprojects.sub.SubScreenConfig;
+import com.petprojects.sub.SubScreenManager;
 import com.sub.example.BuildConfig;
 import com.sub.example.R;
 
@@ -78,7 +78,7 @@ public class Sub {
         subActivityMap.put(SUB_SCREEN_2, new Sub2Fragment());
 
         PurchaseConfig purchaseConfig = PurchaseConfig.newConfig();
-        purchaseConfig.setLifeTimePack(PACK_LIFE_TIME)
+        purchaseConfig.setLifeTimePack(Arrays.asList(PACK_LIFE_TIME))
                 .setSubPacks(Arrays.asList(PACK_SUB_WEEK, PACK_SUB_MONTH, PACK_SUB_YEAR));
 
         SubScreenConfig config = SubScreenConfig.newConfig(context)

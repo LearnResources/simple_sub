@@ -4,7 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.StringRes;
 
-import com.sub.PurchaseHelper;
+import com.petprojects.sub.PurchaseHelper;
 
 public class PurchasePack {
     private final String packTitle;
