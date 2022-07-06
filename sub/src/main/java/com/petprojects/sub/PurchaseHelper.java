@@ -5,8 +5,6 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
 import com.android.billingclient.api.AcknowledgePurchaseParams;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
@@ -17,15 +15,10 @@ import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
-import com.petprojects.sub.checker.SubAppChecker;
-import com.petprojects.sub.checker.SubCheckerTopic;
-import com.petprojects.sub.event.PurchasedEvent;
 import com.petprojects.sub.util.SubLogUtils;
-
-import org.greenrobot.eventbus.EventBus;
+import com.petprojects.sub.util.SubPref;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,6 +29,7 @@ public class PurchaseHelper {
     private List<SkuDetails> skuDetailsListIAP = new ArrayList<>();
     private List<SkuDetails> skuDetailsListSUB = new ArrayList<>();
     private SubBillingPriceCallback subBillingPriceCallback;
+    private PurchaseConfig purchaseConfig;
 
     public PurchaseHelper setCallback(PurchaseCallback callback) {
         this.callback = callback;
@@ -45,7 +39,6 @@ public class PurchaseHelper {
     private final PurchasesUpdatedListener purchasesUpdatedListener = new PurchasesUpdatedListener() {
 
         public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchases) {
-            Log.i("superman", "onPurchasesUpdated: " + billingResult.getResponseCode());
             if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK
                     && purchases != null) {
                 for (int i = 0; i < purchases.size(); i++) {
@@ -53,9 +46,9 @@ public class PurchaseHelper {
                 }
                 return;
             }
-            if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.USER_CANCELED) {
-                SubAppChecker.instance().getAppDelegate().registerNotificationTopic(SubCheckerTopic.SUB_CANCEL);
-            }
+//            if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.USER_CANCELED) {
+//                SubAppChecker.instance().getAppDelegate().registerNotificationTopic(SubCheckerTopic.SUB_CANCEL);
+//            }
             if (callback != null) {
                 callback.purchaseFail();
             }
@@ -80,26 +73,33 @@ public class PurchaseHelper {
     }
 
     public void purchaseSuccess() {
-        SubAppChecker.instance().getAppDelegate()
-                .unregisterNotificationTopic(SubCheckerTopic.SUB_CANCEL);
-
-        if (EventBus.getDefault().hasSubscriberForEvent(PurchasedEvent.class)) {
-            EventBus.getDefault().post(new PurchasedEvent());
-        }
-        SubConfigPrefs.get().updateLocalPurchasedState(true);
+//        SubAppChecker.instance().getAppDelegate()
+//                .unregisterNotificationTopic(SubCheckerTopic.SUB_CANCEL);
+//
+//        if (EventBus.getDefault().hasSubscriberForEvent(PurchasedEvent.class)) {
+//            EventBus.getDefault().post(new PurchasedEvent());
+//        }
+        SubPref.get().updateLocalPurchasedState(true);
         if (callback != null) {
             callback.purchaseSuccessfully();
         }
     }
 
     public static synchronized PurchaseHelper getInstance() {
-        if (instance == null || instance.billingClient == null) {
+        if (instance == null) {
             instance = new PurchaseHelper();
         }
         return instance;
     }
 
+    public PurchaseHelper setPurchaseConfig(PurchaseConfig purchaseConfig) {
+        Log.i("superman", "setPurchaseConfig: " + purchaseConfig);
+        this.purchaseConfig = purchaseConfig;
+        return this;
+    }
+
     private PurchaseHelper() {
+        Log.i("superman", "PurchaseHelper: new ins");
     }
 
     public CurrencyInfo getPriceValue(String productId) {
@@ -131,24 +131,22 @@ public class PurchaseHelper {
         return null;
     }
 
-    @NonNull
     private CurrencyInfo getCurrencyInfo(String priceFormat, SkuDetails skuDetails) {
         double price = (float) skuDetails.getPriceAmountMicros() / 1000000;
         return new CurrencyInfo(priceFormat, price, skuDetails.getPrice());
     }
 
-    @NonNull
     private String keepUniqueString(String priceFormat) {
-        String temp = "";
+        StringBuilder temp = new StringBuilder();
         for (int i = 0; i < priceFormat.length(); i++) {
             char ch = priceFormat.charAt(i);
-            if (temp.indexOf(ch) == -1) {
-                temp = temp + ch;
+            if (temp.toString().indexOf(ch) == -1) {
+                temp.append(ch);
             } else {
-                temp.replace(String.valueOf(ch), ""); // added this to your existing code
+                temp.toString().replace(String.valueOf(ch), ""); // added this to your existing code
             }
         }
-        return temp;
+        return temp.toString();
     }
 
     public void initBilling(Context context) {
@@ -171,7 +169,7 @@ public class PurchaseHelper {
                 .build();
         billingClient.startConnection(new BillingClientStateListener() {
             @Override
-            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+            public void onBillingSetupFinished(BillingResult billingResult) {
                 SubLogUtils.logD(billingResult.getResponseCode());
                 onBillingConnected(billingResult);
                 if (billingClientStateListener != null) {
@@ -189,12 +187,15 @@ public class PurchaseHelper {
         });
     }
 
-    private void onBillingConnected(@NonNull BillingResult billingResult) {
+    private void onBillingConnected(BillingResult billingResult) {
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
             PurchaseConfig purchaseConfig = getPurchaseConfig();
             if (purchaseConfig == null) {
+                Log.i("superman", "onBillingConnected: nulled");
                 return;
             }
+
+            Log.i("superman", "onBillingConnected: " + purchaseConfig.getLifeTimePack());
 
             SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
             params.setSkusList(purchaseConfig.getLifeTimePack())
@@ -218,12 +219,7 @@ public class PurchaseHelper {
     }
 
     private PurchaseConfig getPurchaseConfig() {
-        try {
-            return SubScreenManager.getInstance().getConfig().getPurchaseConfig();
-        } catch (Exception exception) {
-            SubLogUtils.logE(exception);
-        }
-        return null;
+        return purchaseConfig;
     }
 
     public void consume(Context context, String productId) {
@@ -252,14 +248,14 @@ public class PurchaseHelper {
     }
 
     public boolean isRemovedAds(Context context) {
-        if (billingClient == null) {
-            initBilling(context);
-        }
+//        if (billingClient == null) {
+//            initBilling(context);
+//        }
         return isPurchased() || isSubscribed() || isRemovedAdsLocalState(context);
     }
 
     public boolean isRemovedAdsLocalState(Context context) {
-        SubConfigPrefs subConfigPrefs = SubConfigPrefs.get();
+        SubPref subConfigPrefs = SubPref.get();
         return subConfigPrefs.isLocalSubscribedState() || subConfigPrefs.isLocalPurchasedState();
     }
 
@@ -268,11 +264,11 @@ public class PurchaseHelper {
             Purchase.PurchasesResult purchasesResult = billingClient.queryPurchases(BillingClient.SkuType.INAPP);
             for (Purchase purchase : Objects.requireNonNull(purchasesResult.getPurchasesList())) {
                 if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
-                    SubConfigPrefs.get().updateLocalPurchasedState(true);
+                    SubPref.get().updateLocalPurchasedState(true);
                     return true;
                 }
             }
-            SubConfigPrefs.get().updateLocalPurchasedState(false);
+            SubPref.get().updateLocalPurchasedState(false);
         } catch (Exception ignored) {
         }
         return false;
@@ -295,7 +291,7 @@ public class PurchaseHelper {
                                 subscribed = true;
                             }
                         }
-                        SubConfigPrefs.get().updateLocalPurchasedState(subscribed);
+                        SubPref.get().updateLocalPurchasedState(subscribed);
                         if (callback != null) {
                             if (subscribed) {
                                 callback.onPurchased();
@@ -306,7 +302,7 @@ public class PurchaseHelper {
                     });
                     return;
                 }
-                SubConfigPrefs.get().updateLocalPurchasedState(purchased);
+                SubPref.get().updateLocalPurchasedState(purchased);
                 if (callback != null) {
                     callback.onPurchased();
                 }
@@ -321,11 +317,11 @@ public class PurchaseHelper {
             Purchase.PurchasesResult purchasesResult = billingClient.queryPurchases(BillingClient.SkuType.SUBS);
             for (Purchase purchase : Objects.requireNonNull(purchasesResult.getPurchasesList())) {
                 if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
-                    SubConfigPrefs.get().updateLocalSubscribedState(true);
+                    SubPref.get().updateLocalSubscribedState(true);
                     return true;
                 }
             }
-            SubConfigPrefs.get().updateLocalSubscribedState(false);
+            SubPref.get().updateLocalSubscribedState(false);
         } catch (Exception exception) {
             SubLogUtils.logE(exception);
         }
@@ -335,9 +331,9 @@ public class PurchaseHelper {
     public void purchase(Activity activity, String productId) {
         try {
             SubLogUtils.logD(productId);
-            if (billingClient == null) {
-                initBilling(activity);
-            }
+//            if (billingClient == null) {
+//                initBilling(activity);
+//            }
             SkuDetails skuDetails = getSkuDetail(skuDetailsListIAP, productId);
             BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder()
                     .setSkuDetails(skuDetails)
@@ -350,9 +346,9 @@ public class PurchaseHelper {
 
     public void subscribe(Activity activity, String productId) {
         SubLogUtils.logD(productId);
-        if (billingClient == null) {
-            initBilling(activity);
-        }
+//        if (billingClient == null) {
+//            initBilling(activity);
+//        }
         SkuDetails skuDetails = getSkuDetail(skuDetailsListSUB, productId);
         BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder()
                 .setSkuDetails(skuDetails)
@@ -380,11 +376,6 @@ public class PurchaseHelper {
             SubLogUtils.logE(exception);
         }
         return false;
-    }
-
-    public boolean isReady() {
-        String price = PurchaseHelper.getInstance().getPrice(SubScreenManager.getInstance().getSubDefaultPack());
-        return !TextUtils.isEmpty(price) && !price.equalsIgnoreCase("0$");
     }
 
     public String getPrice(String productId) {

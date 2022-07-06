@@ -41,4 +41,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-core'
     implementation 'com.google.firebase:firebase-config'
+    implementation 'org.greenrobot:eventbus:3.2.0'
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.amitshekhar.android:android-networking:1.0.2'
 }

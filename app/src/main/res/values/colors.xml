@@ -10,5 +10,6 @@
     <color name="gray_6">#BFBFBF</color>
     <color name="sub_text">#ffffff</color>
     <color name="sub_pack_text_selected">#00D1FF</color>
+    <color name="sm_white">#ffffff</color>
 
 </resources>

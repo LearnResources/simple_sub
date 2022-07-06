@@ -5,9 +5,6 @@ import android.text.TextUtils;
 
 import com.petprojects.sub.PurchaseConfig;
 import com.petprojects.sub.PurchaseHelper;
-import com.petprojects.sub.SubScreen;
-import com.petprojects.sub.SubScreenConfig;
-import com.petprojects.sub.SubScreenManager;
 import com.sub.example.BuildConfig;
 import com.sub.example.R;
 
@@ -42,11 +39,6 @@ public class Sub {
         }
     }
 
-    private static final List<PurchasePack> purchasePacks = Arrays.asList(
-            PurchasePack.newPack("Get Your 3-Days Free", Sub.PACK_SUB_MONTH, R.string.sub_monthly_desc),
-            PurchasePack.newPack("3-Day free trial", Sub.PACK_SUB_WEEK, R.string.sub_day_desc),
-            PurchasePack.newPack("Lifetime", Sub.PACK_LIFE_TIME));
-
     private static final List<PurchasePack> purchasePacksYearly = Arrays.asList(
             PurchasePack.newPack("Weekly", Sub.PACK_SUB_WEEK, R.string.sub_day_desc),
             PurchasePack.newPack("3 - Days\nFree trial", Sub.PACK_SUB_MONTH, R.string.sub_monthly_desc),
@@ -77,15 +69,10 @@ public class Sub {
         subActivityMap.put(SUB_SCREEN_1, new Sub1Fragment());
         subActivityMap.put(SUB_SCREEN_2, new Sub2Fragment());
 
-        PurchaseConfig purchaseConfig = PurchaseConfig.newConfig();
-        purchaseConfig.setLifeTimePack(Arrays.asList(PACK_LIFE_TIME))
-                .setSubPacks(Arrays.asList(PACK_SUB_WEEK, PACK_SUB_MONTH, PACK_SUB_YEAR));
-
         SubScreenConfig config = SubScreenConfig.newConfig(context)
                 .setSubStyles(subActivityMap)
                 .setDefaultSubFeatureTexts(featureTexts)
-                .setSubStyleDefault(SUB_SCREEN_1, SUB_SCREEN_2)
-                .setPurchaseConfig(purchaseConfig);
+                .setSubStyleDefault(SUB_SCREEN_1, SUB_SCREEN_2);
 
         SubScreenManager.init(config);
     }

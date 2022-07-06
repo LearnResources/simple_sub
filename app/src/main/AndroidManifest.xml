@@ -19,6 +19,43 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".sub.SubActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="unspecified"
+            android:theme="@style/Sub.Theme.Transparent" />
+
+        <activity
+            android:name=".sub.SubRewardActivity"
+            android:launchMode="singleTop"
+            android:noHistory="true"
+            android:screenOrientation="unspecified"
+            android:theme="@style/Sub.Theme.Transparent" />
+
+        <receiver
+            android:name="com.sub.example.sub.checker.service.SubCheckerBoostReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.sub.example.sub.checker.service.ReminderService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <receiver
+            android:name="com.sub.example.sub.checker.service.ReminderReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.sub.ACTION_SUB_CHECKER" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

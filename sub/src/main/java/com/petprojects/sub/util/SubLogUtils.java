@@ -1,14 +1,8 @@
 package com.petprojects.sub.util;
 
-import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.google.gson.Gson;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 public class SubLogUtils {
@@ -28,14 +22,6 @@ public class SubLogUtils {
 
     public static void logD(String message) {
         Log.d(TAG, composeDefaultMessage(message));
-    }
-
-    public static void logObject(Object object) {
-        try {
-            Log.d(TAG, composeDefaultMessage(String.valueOf(new Gson().toJson(object))));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public static void logD(int intValue) {
@@ -63,18 +49,6 @@ public class SubLogUtils {
 
     private static String composeDefaultMessage(String message) {
         return getCurrentMethod() + " = " + message;
-    }
-
-    public static void writeStringAsFile(Context context, final String fileContents, String fileName) {
-        try {
-            SubLogUtils.showCurrentMethodName();
-            FileWriter out = new FileWriter(new File(context.getFilesDir(), fileName));
-            out.write(fileContents);
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            SubLogUtils.logE(e.getMessage());
-        }
     }
 
     private static String getCurrentMethod() {

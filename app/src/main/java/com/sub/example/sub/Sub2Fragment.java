@@ -6,7 +6,6 @@ import android.view.View;
 import androidx.fragment.app.Fragment;
 
 
-import com.petprojects.sub.SubScreen;
 import com.sub.example.R;
 
 import java.util.Arrays;

@@ -26,12 +26,10 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.petprojects.sub.PurchaseHelper;
-import com.petprojects.sub.SubConfigPrefs;
-import com.petprojects.sub.base.BaseSubFragment;
+import com.sub.example.base.BaseSubFragment;
 import com.petprojects.sub.util.SubLogUtils;
 import com.sub.example.R;
-import com.sub.example.sub.PurchasePack;
-import com.sub.example.sub.Sub;
+import com.sub.example.sub.util.SubConfigPrefs;
 
 import java.util.Collections;
 import java.util.HashMap;

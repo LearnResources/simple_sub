@@ -18,4 +18,8 @@
     <string name="sub_continue" translatable="false">Continue</string>
     <string name="sub_try_3_days" translatable="false">Try it FREE for 3 days!</string>
     <string name="sub_free_trial_3_days" translatable="false">3-Day free trial</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="watch_now">Watch now</string>
+    <string name="reward_description">Watch the video to unlock the \ncasting video feature now!</string>
 </resources>
